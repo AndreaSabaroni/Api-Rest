@@ -5,6 +5,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
@@ -33,7 +36,7 @@ public class ServicioMutanteTest {
 	@Test
 	public void establecerMutanteInformaEsMutante() throws Exception {
 
-		String[] dnaMutant = { "ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG" };
+		List<String> dnaMutant = Arrays.asList( "ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG" );
 
 		boolean mutante = servicio.isMutant(dnaMutant);
 
@@ -45,7 +48,7 @@ public class ServicioMutanteTest {
 	public void lasLetrasDelADNSoloPermiten_ATCG(
 			@FromDataPoints("ADN_CARACTER_INVALIDO") String adn_caracteres_invalidos) {
 
-		String[] dnaMutant = { adn_caracteres_invalidos, "CAGTGC", "TTATGT", "AGAAGG", "CCCCCC", "ttttTT" };
+		List<String> dnaMutant = Arrays.asList( adn_caracteres_invalidos, "CAGTGC", "TTATGT", "AGAAGG", "CCCCCC", "ttttTT" );
 
 		try {
 			servicio.isMutant(dnaMutant);
@@ -58,7 +61,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void cadenasDeADNMEnoresACuatroNoEsMutante(@FromDataPoints("ADN_CORTO") String adn_corto) {
 
-		String[] dnaMutant = { adn_corto };
+		List<String> dnaMutant = Arrays.asList(adn_corto );
 
 		try {
 			servicio.isMutant(dnaMutant);
@@ -71,7 +74,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroA_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_A") String adn_mutanteA) {
 		try {
-			String[] dnaMutant = { adn_mutanteA, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" };
+			List<String> dnaMutant = Arrays.asList( adn_mutanteA, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -82,7 +85,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroT_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_T") String adn_mutanteT) {
 		try {
-			String[] dnaMutant = { adn_mutanteT, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" };
+			List<String> dnaMutant = Arrays.asList(adn_mutanteT, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" );
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -93,7 +96,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroG_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_G") String adn_mutanteG) {
 		try {
-			String[] dnaMutant = { adn_mutanteG, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" };
+			List<String> dnaMutant = Arrays.asList( adn_mutanteG, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" );
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -104,7 +107,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroC_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_C") String adn_mutanteC) {
 		try {
-			String[] dnaMutant = { adn_mutanteC, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" };
+			List<String> dnaMutant = Arrays.asList( adn_mutanteC, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -116,7 +119,7 @@ public class ServicioMutanteTest {
 	public void siLasCadenasDeUnADN_NoTienenLaMismaLongitudEntoncesEsInvalido() {
 
 		try {
-			String[] dnaMutant = { "AAAT", "TCGTAAA", "AACCGGTT", "AACCTTAAGG" };
+			List<String> dnaMutant = Arrays.asList( "AAAT", "TCGTAAA", "AACCGGTT", "AACCTTAAGG" );
 
 			servicio.isMutant(dnaMutant);
 			fail("Debe fallar");
@@ -130,7 +133,7 @@ public class ServicioMutanteTest {
 	public void siLaCantidadDeCadenasDelADN_EsDistintaALaLongitudDeLaCadena_EntoncesEsInvalido() {
 
 		try {
-			String[] dnaMutant = { "AAATC", "TCGTA", "AACCG", "TAAGG" };
+			List<String> dnaMutant = Arrays.asList( "AAATC", "TCGTA", "AACCG", "TAAGG" );
 
 			servicio.isMutant(dnaMutant);
 			fail("Debe fallar");
@@ -145,8 +148,8 @@ public class ServicioMutanteTest {
 			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
 
 		try {
-			String[] dnaMutant = { letraPermitida + "AATC", letraPermitida + "CGTA", letraPermitida + "ACCG",
-					letraPermitida + "AAGG", letraPermitida + "CCtg" };
+			List<String> dnaMutant = Arrays.asList( letraPermitida + "AATC", letraPermitida + "CGTA", letraPermitida + "ACCG",
+					letraPermitida + "AAGG", letraPermitida + "CCtg" );
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -159,8 +162,8 @@ public class ServicioMutanteTest {
 			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
 
 		try {
-			String[] dnaMutant = { "AATC" + letraPermitida, "CGTA" + letraPermitida, "ACCG" + letraPermitida,
-					"AAGG" + letraPermitida, "CCtg" + letraPermitida };
+			List<String> dnaMutant = Arrays.asList( "AATC" + letraPermitida, "CGTA" + letraPermitida, "ACCG" + letraPermitida,
+					"AAGG" + letraPermitida, "CCtg" + letraPermitida );
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {

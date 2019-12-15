@@ -1,5 +1,7 @@
 package mutante.servicio;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,15 +17,15 @@ public class ServicioMutante {
 	private static final String ADN_LONGITUD_INVALIDA = "ADN mal formado, debe contener al menos 4 carateres";
 	private static final String ADN_TAMAÑO_INCORRECTO = "ADN mal formado, no se puede armar matríz de evaluación";
 
-	public boolean isMutant(String[] dnaMutant) throws Exception {
+	public boolean isMutant(List<String> dnaMutant) throws Exception {
 		esADNValido(dnaMutant);
 		return esMutante(dnaMutant);
 
 	}
 
-	private void esADNValido(String[] dnaMutant) throws Exception {
-		int longitudCadena = dnaMutant[0].length();
-		if (dnaMutant.length != longitudCadena)
+	private void esADNValido(List<String> dnaMutant) throws Exception {
+		int longitudCadena = dnaMutant.get(0).length();
+		if (dnaMutant.size() != longitudCadena)
 			throw new Exception(ADN_TAMAÑO_INCORRECTO);
 
 		for (String adn : dnaMutant) {
@@ -43,13 +45,13 @@ public class ServicioMutante {
 		}
 	}
 
-	private boolean esMutante(String[] dnaMutant) {
+	private boolean esMutante(List<String> dnaMutant) {
 		return esMutanteHorizontal(dnaMutant) 
 				|| esMutanteVertical(dnaMutant) 
 				|| esMutanteDiagonal(dnaMutant);
 	}
 
-	private boolean esMutanteDiagonal(String[] dnaMutant) {
+	private boolean esMutanteDiagonal(List<String> dnaMutant) {
 		String cadenaAdn = "";
 		int indiceDiagonal = 0;
 		for (String adn : dnaMutant) {
@@ -62,10 +64,10 @@ public class ServicioMutante {
 		return false;
 	}
 
-	private boolean esMutanteVertical(String[] dnaMutant) {
+	private boolean esMutanteVertical(List<String> dnaMutant) {
 
 		String cadenaAdn = "";
-		for (int indiceVertical = 0; indiceVertical < dnaMutant.length; indiceVertical++) {
+		for (int indiceVertical = 0; indiceVertical < dnaMutant.size(); indiceVertical++) {
 			for (String adn : dnaMutant) {
 				cadenaAdn = cadenaAdn + adn.charAt(indiceVertical);
 			}
@@ -76,7 +78,7 @@ public class ServicioMutante {
 		return false;
 	}
 
-	private boolean esMutanteHorizontal(String[] dnaMutant) {
+	private boolean esMutanteHorizontal(List<String> dnaMutant) {
 
 		boolean esMutante = false;
 

@@ -27,14 +27,7 @@ apply plugin: 'maven-publish'
 
 
 
-task verify(group: "verification", description: "Ejecuta todas las pruebas") {
-    dependsOn 'test'
-}
 
-
-task allTest(type: Test) {
-    dependsOn 'test'
-}
 
 repositories {
     mavenCentral()
@@ -42,6 +35,7 @@ repositories {
 }
 
 dependencies {
+    compile('org.springframework:spring-tx:5.2.2.RELEASE')
     compile('org.springframework.boot:spring-boot-devtools')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-web')
@@ -74,6 +68,7 @@ dependencies {
     testCompile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.6')
 }
 
+def codeCheckExclusions = ['**/configuraciones/**']
 
 tasks.withType(PublishToMavenRepository){ task ->
     task.dependsOn build

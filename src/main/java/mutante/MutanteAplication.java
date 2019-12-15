@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan("mutantes")
 public class MutanteAplication extends SpringBootServletInitializer{
 	public static void main(String[] args) {
 
