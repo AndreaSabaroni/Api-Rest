@@ -56,18 +56,5 @@ public class RecursoMutanteTest {
 		assertThat(respuesta.getStatusCode(), is(HttpStatus.FORBIDDEN));
 	}
 
-	@Test
-	public void alHacerUnPostAMutanteConAdnInvalidoDevuelve400() throws Exception {
-
-		List<String> dnaMutant = Arrays.asList( "TAAAIC", "gtXAGt", "ATGCC", "TCCAAA", "CCTAAA" );
-		RequestADN request = new RequestADN();
-		request.setAdn(dnaMutant);
-
-		Mockito.when(servicio.isMutant(dnaMutant)).thenReturn(false);
-
-		ResponseEntity<?> respuesta = recurso.determinarSiEsMutante(request);
-
-		assertThat(respuesta.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-	}
 
 }
