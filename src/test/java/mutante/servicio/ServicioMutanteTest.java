@@ -1,5 +1,6 @@
 package mutante.servicio;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -105,6 +106,18 @@ public class ServicioMutanteTest {
 		} catch (Exception ex) {
 			fail("No debe fallar");
 		}
+	}
+	
+	@Test
+	public void unAdnDeUnHumanoNoMutanteIndicaQueNoEsMutante() {
+		try {
+			List<String> dnaMutant = Arrays.asList("TACA", "AgTT", "AATC", "AcGT");
+
+			assertFalse(servicio.isMutant(dnaMutant));
+		} catch (Exception ex) {
+			fail("No debe fallar");
+		}
+
 	}
 
 }

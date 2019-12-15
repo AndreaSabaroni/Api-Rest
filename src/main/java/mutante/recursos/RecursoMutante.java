@@ -1,5 +1,7 @@
 package mutante.recursos;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ public class RecursoMutante {
 	private ServicioMutante servicioMutante;
 
 	@PostMapping(path = "/mutant", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> determinarSiEsMutante(@RequestBody RequestADN dnaMutant) {
+	public ResponseEntity<?> determinarSiEsMutante(@RequestBody @Valid RequestADN dnaMutant) {
 
 		if (servicioMutante.isMutant(dnaMutant.getAdn()))
 			return ResponseEntity.ok().build();

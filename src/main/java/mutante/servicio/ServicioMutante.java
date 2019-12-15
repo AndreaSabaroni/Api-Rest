@@ -30,7 +30,7 @@ public class ServicioMutante {
 			cadenaAdn = cadenaAdn + adn.charAt(indiceDiagonal);
 			indiceDiagonal++;
 		}
-		if (esMutante(cadenaAdn))
+		if (esCadenaMutante(cadenaAdn))
 			return true;
 
 		return false;
@@ -43,9 +43,9 @@ public class ServicioMutante {
 			for (String adn : dnaMutant) {
 				cadenaAdn = cadenaAdn + adn.charAt(indiceVertical);
 			}
-			if (esMutante(cadenaAdn))
+			if (esCadenaMutante(cadenaAdn))
 				return true;
-
+			cadenaAdn ="";
 		}
 		return false;
 	}
@@ -55,14 +55,14 @@ public class ServicioMutante {
 		boolean esMutante = false;
 
 		for (String adn : dnaMutant) {
-			if (esMutante(adn))
+			if (esCadenaMutante(adn))
 				return true;
 
 		}
 		return esMutante;
 	}
 
-	private boolean esMutante(String adn) {
+	private boolean esCadenaMutante(String adn) {
 		String adnIgnoreCase = adn.toUpperCase();
 
 		return adnIgnoreCase.contains(MUTANTE_A) || adnIgnoreCase.contains(MUTANTE_C)
