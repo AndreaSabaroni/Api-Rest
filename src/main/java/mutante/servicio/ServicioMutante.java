@@ -7,42 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicioMutante {
 
-	private static final String ADN_DISTINTA_LONGITUD = "ADN mal formado, cadenas de distinta longitud";
-	private static final String CARACTERES_VALIDOS = "ATCG";
 	private static final String MUTANTE_A = "AAAA";
 	private static final String MUTANTE_C = "CCCC";
 	private static final String MUTANTE_T = "TTTT";
 	private static final String MUTANTE_G = "GGGG";
-	private static final String ADN_CARACTER_INVALIDO = "ADN mal formado, sólo se permite ATCG";
-	private static final String ADN_LONGITUD_INVALIDA = "ADN mal formado, debe contener al menos 4 carateres";
-	private static final String ADN_TAMAÑO_INCORRECTO = "ADN mal formado, no se puede armar matríz de evaluación";
 
-	public boolean isMutant(List<String> dnaMutant) throws Exception {
-		esADNValido(dnaMutant);
+	public boolean isMutant(List<String> dnaMutant){
 		return esMutante(dnaMutant);
 
-	}
-
-	private void esADNValido(List<String> dnaMutant) throws Exception {
-		int longitudCadena = dnaMutant.get(0).length();
-		if (dnaMutant.size() != longitudCadena)
-			throw new Exception(ADN_TAMAÑO_INCORRECTO);
-
-		for (String adn : dnaMutant) {
-			if (adn.length() != longitudCadena)
-				throw new Exception(ADN_DISTINTA_LONGITUD);
-
-			esCadenaDeADNValida(adn.toUpperCase());
-		}
-	}
-
-	private void esCadenaDeADNValida(String adn) throws Exception {
-		if (adn == null || adn.isBlank() || adn.length() < 4)
-			throw new Exception(ADN_LONGITUD_INVALIDA);
-		for (int i = 0; i < adn.length(); i++) {
-			if (CARACTERES_VALIDOS.indexOf(adn.charAt(i)) < 0)
-				throw new Exception(ADN_CARACTER_INVALIDO);
-		}
 	}
 
 	private boolean esMutante(List<String> dnaMutant) {

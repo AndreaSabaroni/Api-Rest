@@ -12,22 +12,17 @@ import mutante.servicio.ServicioMutante;
 
 @RestController
 public class RecursoMutante {
-	
+
 	private ServicioMutante servicioMutante;
 
 	@PostMapping(path = "/mutant", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> determinarSiEsMutante(@RequestBody RequestADN dnaMutant) {
+	public ResponseEntity<?> determinarSiEsMutante(@RequestBody RequestADN dnaMutant) {
 
-		try {
-			if (servicioMutante.isMutant(dnaMutant.getAdn()))
-				return ResponseEntity.ok().build();
+		if (servicioMutante.isMutant(dnaMutant.getAdn()))
+			return ResponseEntity.ok().build();
 
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		}
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 	}
-    
 
 	@Autowired
 	public void setServicioMutante(ServicioMutante servicioMutante) {

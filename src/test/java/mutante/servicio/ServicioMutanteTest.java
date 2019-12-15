@@ -1,7 +1,5 @@
 package mutante.servicio;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -17,11 +15,6 @@ public class ServicioMutanteTest {
 
 	ServicioMutante servicio = new ServicioMutante();
 
-	@DataPoints("ADN_CARACTER_INVALIDO")
-	public static final String[] ADN_CARACTER_INVALIDO = { "389YTA", "234156", "QWER?4", "T$$$$A", "KOFDF3", "DFASDF" };
-	@DataPoints("ADN_CORTO")
-	public static final String[] ADN_CORTO = { "A", "GCC", "C", "TG", " " };
-
 	@DataPoints("MUTANTE_A")
 	public static final String[] MUTANTE_A = { "TAAAAC", "AAAAGt", "ATAAAA", "TCAAAA", "CCAAAA" };
 	@DataPoints("MUTANTE_T")
@@ -30,13 +23,11 @@ public class ServicioMutanteTest {
 	public static final String[] MUTANTE_C = { "TCCCCG", "CCCCCT", "ACCCCC", "TTCCCC", "CCCCTA" };
 	@DataPoints("MUTANTE_G")
 	public static final String[] MUTANTE_G = { "GGGGCT", "ACGGGG", "GGGGGC", "GGGGTa", "CGGGgA" };
-	@DataPoints("LETRAS_PERMITIDAS")
-	public static final String[] LETRAS_PERMITIDAS = { "A", "C", "T", "G", "a", "c", "t", "g" };
 
 	@Test
 	public void establecerMutanteInformaEsMutante() throws Exception {
 
-		List<String> dnaMutant = Arrays.asList( "ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG" );
+		List<String> dnaMutant = Arrays.asList("ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG");
 
 		boolean mutante = servicio.isMutant(dnaMutant);
 
@@ -45,36 +36,9 @@ public class ServicioMutanteTest {
 	}
 
 	@Theory
-	public void lasLetrasDelADNSoloPermiten_ATCG(
-			@FromDataPoints("ADN_CARACTER_INVALIDO") String adn_caracteres_invalidos) {
-
-		List<String> dnaMutant = Arrays.asList( adn_caracteres_invalidos, "CAGTGC", "TTATGT", "AGAAGG", "CCCCCC", "ttttTT" );
-
-		try {
-			servicio.isMutant(dnaMutant);
-			fail("debe lanzar excepción");
-		} catch (Exception ex) {
-			assertThat(ex.getMessage(), is("ADN mal formado, sólo se permite ATCG"));
-		}
-	}
-
-	@Theory
-	public void cadenasDeADNMEnoresACuatroNoEsMutante(@FromDataPoints("ADN_CORTO") String adn_corto) {
-
-		List<String> dnaMutant = Arrays.asList(adn_corto );
-
-		try {
-			servicio.isMutant(dnaMutant);
-			fail("debe lanzar excepción");
-		} catch (Exception ex) {
-			assertThat(ex.getMessage(), is("ADN mal formado, debe contener al menos 4 carateres"));
-		}
-	}
-
-	@Theory
 	public void unADNConCuatroA_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_A") String adn_mutanteA) {
 		try {
-			List<String> dnaMutant = Arrays.asList( adn_mutanteA, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			List<String> dnaMutant = Arrays.asList(adn_mutanteA, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -85,7 +49,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroT_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_T") String adn_mutanteT) {
 		try {
-			List<String> dnaMutant = Arrays.asList(adn_mutanteT, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" );
+			List<String> dnaMutant = Arrays.asList(adn_mutanteT, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -96,7 +60,7 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroG_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_G") String adn_mutanteG) {
 		try {
-			List<String> dnaMutant = Arrays.asList( adn_mutanteG, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC" );
+			List<String> dnaMutant = Arrays.asList(adn_mutanteG, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -107,39 +71,11 @@ public class ServicioMutanteTest {
 	@Theory
 	public void unADNConCuatroC_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_C") String adn_mutanteC) {
 		try {
-			List<String> dnaMutant = Arrays.asList( adn_mutanteC, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			List<String> dnaMutant = Arrays.asList(adn_mutanteC, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
 			fail("No debe fallar");
-		}
-	}
-
-	@Test
-	public void siLasCadenasDeUnADN_NoTienenLaMismaLongitudEntoncesEsInvalido() {
-
-		try {
-			List<String> dnaMutant = Arrays.asList( "AAAT", "TCGTAAA", "AACCGGTT", "AACCTTAAGG" );
-
-			servicio.isMutant(dnaMutant);
-			fail("Debe fallar");
-		} catch (Exception ex) {
-			assertThat(ex.getMessage(), is("ADN mal formado, cadenas de distinta longitud"));
-
-		}
-	}
-
-	@Test
-	public void siLaCantidadDeCadenasDelADN_EsDistintaALaLongitudDeLaCadena_EntoncesEsInvalido() {
-
-		try {
-			List<String> dnaMutant = Arrays.asList( "AAATC", "TCGTA", "AACCG", "TAAGG" );
-
-			servicio.isMutant(dnaMutant);
-			fail("Debe fallar");
-		} catch (Exception ex) {
-			assertThat(ex.getMessage(), is("ADN mal formado, no se puede armar matríz de evaluación"));
-
 		}
 	}
 
@@ -148,8 +84,8 @@ public class ServicioMutanteTest {
 			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
 
 		try {
-			List<String> dnaMutant = Arrays.asList( letraPermitida + "AATC", letraPermitida + "CGTA", letraPermitida + "ACCG",
-					letraPermitida + "AAGG", letraPermitida + "CCtg" );
+			List<String> dnaMutant = Arrays.asList(letraPermitida + "AATC", letraPermitida + "CGTA",
+					letraPermitida + "ACCG", letraPermitida + "AAGG", letraPermitida + "CCtg");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -162,8 +98,8 @@ public class ServicioMutanteTest {
 			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
 
 		try {
-			List<String> dnaMutant = Arrays.asList( "AATC" + letraPermitida, "CGTA" + letraPermitida, "ACCG" + letraPermitida,
-					"AAGG" + letraPermitida, "CCtg" + letraPermitida );
+			List<String> dnaMutant = Arrays.asList("AATC" + letraPermitida, "CGTA" + letraPermitida,
+					"ACCG" + letraPermitida, "AAGG" + letraPermitida, "CCtg" + letraPermitida);
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
