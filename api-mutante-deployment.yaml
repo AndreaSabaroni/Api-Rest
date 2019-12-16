@@ -1,23 +1,23 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: redis-slave
+  name: api-mutantes
 spec:
   selector:
     matchLabels:
-      app: redis
+      app: mutantes
       role: slave
       tier: backend
   replicas: 2
   template:
     metadata:
       labels:
-        app: redis
+        app: mutantes
         role: slave
         tier: backend
     spec:
       containers:
-      - name: slave
+      - name: mutantes
         image: asabaroni/mutantes:1.0
         resources:
           requests:
