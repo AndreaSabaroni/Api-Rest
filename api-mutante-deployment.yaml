@@ -1,4 +1,29 @@
+# kubetpl:syntax:go-template
+---
 apiVersion: apps/v1 
+---
+data:
+   application.properties: |
+
+      ##
+      # Configuración ambiental para desarrollo (develop)
+      ##
+      
+      # Base de datos
+      spring.datasource.url=jdbc:sqlserver://localhost:1433;database=api_mutantes
+      spring.datasource.username=sa
+      spring.datasource.password=Pa$$w0rd1
+      spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+      logging.level.org.springframework.web=INFO
+      logging.level.org.springframework.ws.client.MessageTracing.sent=DEBUG
+      logging.level.org.springframework.ws.server.MessageTracing.sent=DEBUG
+      logging.level.org.springframework.ws.client.MessageTracing.received=TRACE
+      logging.level.org.springframework.ws.server.MessageTracing.received=TRACE
+
+      spring.flyway.enabled=false
+
+
 kind: Deployment
 metadata:
   name: api-mutantes
@@ -33,4 +58,9 @@ spec:
           # value: env
         ports:
         - containerPort: 6379
----
+
+kind: ConfigMap
+metadata:
+   creationTimestamp: null
+   name: {{ .APP_NAME }}-cm
+   namespace: {{ .NAMESPACE_NAME }}

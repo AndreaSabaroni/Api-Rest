@@ -2,7 +2,11 @@ package mutante.servicio;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import mutante.modelo.ADN;
+import mutante.repositorios.RepositorioDeADN;
 
 @Service
 public class ServicioMutante {
@@ -12,15 +16,45 @@ public class ServicioMutante {
 	private static final String MUTANTE_T = "TTTT";
 	private static final String MUTANTE_G = "GGGG";
 
-	public boolean isMutant(List<String> dnaMutant){
-		return esMutante(dnaMutant);
+	private RepositorioDeADN repositorioAdn;
+
+	@Autowired
+	public void setRepositorioAdn(RepositorioDeADN repositorioAdn) {
+		this.repositorioAdn = repositorioAdn;
+	}
+
+	public boolean isMutant(List<String> dnaMutant) {
+		
+		String cadena = transformarACadena(dnaMutant);
+		
+		var adnPersistido = repositorioAdn.findBycadenaADN(cadena);
+
+		if (adnPersistido == null) {
+			adnPersistido = generarAdn(dnaMutant, cadena);
+
+			repositorioAdn.save(adnPersistido);
+		}
+
+		return adnPersistido.getMutante();
 
 	}
 
+	private ADN generarAdn(List<String> dnaMutant, String cadena) {
+		var adnPersistido= new ADN();
+
+		boolean esMutante = esMutante(dnaMutant);
+		adnPersistido.setMutante(esMutante);
+		adnPersistido.setCadenaADN(cadena);
+		
+		return adnPersistido;
+	}
+
+	private String transformarACadena(List<String> dnaMutant) {
+		 return String.join(", ", dnaMutant);
+	}
+
 	private boolean esMutante(List<String> dnaMutant) {
-		return esMutanteHorizontal(dnaMutant) 
-				|| esMutanteVertical(dnaMutant) 
-				|| esMutanteDiagonal(dnaMutant);
+		return esMutanteHorizontal(dnaMutant) || esMutanteVertical(dnaMutant) || esMutanteDiagonal(dnaMutant);
 	}
 
 	private boolean esMutanteDiagonal(List<String> dnaMutant) {
@@ -45,7 +79,7 @@ public class ServicioMutante {
 			}
 			if (esCadenaMutante(cadenaAdn))
 				return true;
-			cadenaAdn ="";
+			cadenaAdn = "";
 		}
 		return false;
 	}
@@ -68,6 +102,5 @@ public class ServicioMutante {
 		return adnIgnoreCase.contains(MUTANTE_A) || adnIgnoreCase.contains(MUTANTE_C)
 				|| adnIgnoreCase.contains(MUTANTE_G) || adnIgnoreCase.contains(MUTANTE_T);
 	}
-
 
 }
