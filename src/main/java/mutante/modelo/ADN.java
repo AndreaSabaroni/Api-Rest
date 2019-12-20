@@ -40,7 +40,7 @@ public class ADN implements Serializable{
 	public void setCadenaADN(String cadenaADN) {
 		this.cadenaADN = cadenaADN;
 	}
-
+/*
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -66,5 +66,5 @@ public class ADN implements Serializable{
 		return true;
 	}
 	
-
+*/
 }

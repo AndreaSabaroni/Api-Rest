@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import mutante.mensaje.ResponseEstadisticas;
 import mutante.modelo.Estadisticas;
 import mutante.request.RequestADN;
 import mutante.servicio.ServicioMutante;
@@ -29,10 +30,20 @@ public class RecursoMutante {
 	}
 
 	@GetMapping(path = "/stats", produces = "application/json")
-	public ResponseEntity<Estadisticas> obtienerEstadisticas() {
+	public ResponseEntity<ResponseEstadisticas> obtienerEstadisticas() {
 
 		Estadisticas estadisticas = servicioMutante.obtenerEstadisticasDeMutantes();
-		return ResponseEntity.ok(estadisticas);
+		ResponseEstadisticas response = transformar(estadisticas);
+		return ResponseEntity.ok(response);
+	}
+
+	private ResponseEstadisticas transformar(Estadisticas estadisticas) {
+		ResponseEstadisticas response = new ResponseEstadisticas();
+		response.setEvaluados(estadisticas.getEvaluados());
+		response.setMutantes(estadisticas.getMutantes());
+		response.setPorcentajeDeMutante(estadisticas.getPorcentajeDeMutantes());
+		
+		return response;
 	}
 
 	@Autowired
