@@ -1,6 +1,6 @@
 create table dbo.ADN (
 	id bigint identity not null,
-	adn VARCHAR(max) NULL,
-	mutanet bit NOT NULL,
+	cadenaADN VARCHAR(max) NULL,
+	mutante bit NOT NULL,
 	constraint PK_ADN primary key (id)
 )

@@ -8,6 +8,6 @@ import mutante.modelo.ADN;
 @Repository
 public interface RepositorioDeADN extends JpaRepository<ADN, Long> {
 
-	public ADN findBycadenaADN(String adn);
+	ADN findByCadenaADN(String cadenaADN);
 
 }

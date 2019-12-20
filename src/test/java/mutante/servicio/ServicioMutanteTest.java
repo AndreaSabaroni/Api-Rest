@@ -8,38 +8,65 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import mutante.modelo.ADN;
+import mutante.repositorios.RepositorioDeADN;
+
+@RunWith(MockitoJUnitRunner.class)
 public class ServicioMutanteTest {
 
-	ServicioMutante servicio = new ServicioMutante();
+	@InjectMocks
+	ServicioMutante servicio;
 
-	@DataPoints("MUTANTE_A")
-	public static final String[] MUTANTE_A = { "TAAAAC", "AAAAGt", "ATAAAA", "TCAAAA", "CCAAAA" };
-	@DataPoints("MUTANTE_T")
-	public static final String[] MUTANTE_T = { "TTTTGa", "ATTTTG", "AGTTTT", "TCTTTT", "ATTTTg" };
-	@DataPoints("MUTANTE_C")
-	public static final String[] MUTANTE_C = { "TCCCCG", "CCCCCT", "ACCCCC", "TTCCCC", "CCCCTA" };
-	@DataPoints("MUTANTE_G")
-	public static final String[] MUTANTE_G = { "GGGGCT", "ACGGGG", "GGGGGC", "GGGGTa", "CGGGgA" };
+	@Mock
+	RepositorioDeADN repositorio;
 
 	@Test
 	public void establecerMutanteInformaEsMutante() throws Exception {
 
+		dadoQueElADNNoExisteEnLaBase();
 		List<String> dnaMutant = Arrays.asList("ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG");
 
 		boolean mutante = servicio.isMutant(dnaMutant);
 
 		assertTrue(mutante);
-
+		Mockito.verify(repositorio).save(Mockito.any(ADN.class));
 	}
 
-	@Theory
-	public void unADNConCuatroA_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_A") String adn_mutanteA) {
+	@Test
+	public void consultarPorUnAdnExistenteEnLABaseNoVuelveAPersistirlo() throws Exception {
+
+		dadoQueElADNExisteEnLaBaseRetornaElAdnPersistidoIndicandoMutante(true);
+		List<String> dnaMutant = Arrays.asList("ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG");
+
+		boolean mutante = servicio.isMutant(dnaMutant);
+
+		assertTrue(mutante);
+		Mockito.verify(repositorio, Mockito.never()).save(Mockito.any(ADN.class));
+	}
+
+	@Test
+	public void consultarPorUnAdnExistenteEnLABaseRespondeSiEsMutanteSegunLoYaDeterminado() throws Exception {
+
+		dadoQueElADNExisteEnLaBaseRetornaElAdnPersistidoIndicandoMutante(false);
+		List<String> dnaMutant = Arrays.asList("ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CCCTAG", "TCACTG");
+
+		boolean mutante = servicio.isMutant(dnaMutant);
+
+		assertFalse(mutante);
+		Mockito.verify(repositorio, Mockito.never()).save(Mockito.any(ADN.class));
+	}
+
+	@Test
+	public void unADNConCuatroA_ConsecutivosDeterminaQueEsMutante() {
 		try {
-			List<String> dnaMutant = Arrays.asList(adn_mutanteA, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			dadoQueElADNNoExisteEnLaBase();
+			List<String> dnaMutant = Arrays.asList("CCAAAA", "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -47,10 +74,12 @@ public class ServicioMutanteTest {
 		}
 	}
 
-	@Theory
-	public void unADNConCuatroT_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_T") String adn_mutanteT) {
+	@Test
+	public void unADNConCuatroT_ConsecutivosDeterminaQueEsMutante() {
 		try {
-			List<String> dnaMutant = Arrays.asList(adn_mutanteT, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("cATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -58,10 +87,12 @@ public class ServicioMutanteTest {
 		}
 	}
 
-	@Theory
-	public void unADNConCuatroG_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_G") String adn_mutanteG) {
+	@Test
+	public void unADNConCuatroG_ConsecutivosDeterminaQueEsMutante() {
 		try {
-			List<String> dnaMutant = Arrays.asList(adn_mutanteG, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("gATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -69,10 +100,12 @@ public class ServicioMutanteTest {
 		}
 	}
 
-	@Theory
-	public void unADNConCuatroC_ConsecutivosDeterminaQueEsMutante(@FromDataPoints("MUTANTE_C") String adn_mutanteC) {
+	@Test
+	public void unADNConCuatroC_ConsecutivosDeterminaQueEsMutante() {
 		try {
-			List<String> dnaMutant = Arrays.asList(adn_mutanteC, "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("gctaac", "AATTCC", "AATTCC", "AATTCC", "AATTCC", "AATTCC");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -80,13 +113,13 @@ public class ServicioMutanteTest {
 		}
 	}
 
-	@Theory
-	public void SiTodasLasCadenasComienzanConLaMisaLetraAceptada_EntoncesEsMutanteHorizontal(
-			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
+	@Test
+	public void SiTodasLasCadenasComienzanConLaMisaLetraAceptada_EntoncesEsMutanteHorizontal() {
 
 		try {
-			List<String> dnaMutant = Arrays.asList(letraPermitida + "AATC", letraPermitida + "CGTA",
-					letraPermitida + "ACCG", letraPermitida + "AAGG", letraPermitida + "CCtg");
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("gAATC", "GCGTA", "gACCG", "GAAGG", "aCCtg");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
@@ -94,23 +127,25 @@ public class ServicioMutanteTest {
 		}
 	}
 
-	@Theory
-	public void SiTodasLasCadenasFinalizanConLaMisaLetraAceptada_EntoncesEsMutanteHorizontal(
-			@FromDataPoints("LETRAS_PERMITIDAS") String letraPermitida) {
+	@Test
+	public void SiTodasLasCadenasFinalizanConLaMisaLetraAceptada_EntoncesEsMutanteHorizontal() {
 
 		try {
-			List<String> dnaMutant = Arrays.asList("AATC" + letraPermitida, "CGTA" + letraPermitida,
-					"ACCG" + letraPermitida, "AAGG" + letraPermitida, "CCtg" + letraPermitida);
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("AATCc", "CGTAC", "ACCGc", "AAGGC", "CCtga");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
 			fail("No debe fallar");
 		}
 	}
-	
+
 	@Test
 	public void unAdnDeUnHumanoNoMutanteIndicaQueNoEsMutante() {
 		try {
+			dadoQueElADNNoExisteEnLaBase();
+
 			List<String> dnaMutant = Arrays.asList("TACA", "AgTT", "AATC", "AcGT");
 
 			assertFalse(servicio.isMutant(dnaMutant));
@@ -118,6 +153,16 @@ public class ServicioMutanteTest {
 			fail("No debe fallar");
 		}
 
+	}
+
+	private void dadoQueElADNNoExisteEnLaBase() {
+		Mockito.when(repositorio.findByCadenaADN(Mockito.anyString())).thenReturn(null);
+	}
+	private void dadoQueElADNExisteEnLaBaseRetornaElAdnPersistidoIndicandoMutante(boolean mutante) {
+		ADN adnConsultado = new ADN();
+		adnConsultado.setMutante(mutante);
+		Mockito.when(repositorio.findByCadenaADN(Mockito.anyString())).thenReturn(adnConsultado);
+		
 	}
 
 }

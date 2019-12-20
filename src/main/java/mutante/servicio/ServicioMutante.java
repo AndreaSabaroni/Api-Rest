@@ -27,7 +27,7 @@ public class ServicioMutante {
 		
 		String cadena = transformarACadena(dnaMutant);
 		
-		var adnPersistido = repositorioAdn.findBycadenaADN(cadena);
+		var adnPersistido = repositorioAdn.findByCadenaADN(cadena);
 
 		if (adnPersistido == null) {
 			adnPersistido = generarAdn(dnaMutant, cadena);
