@@ -22,7 +22,6 @@ public class EstadisticasTest {
 		Estadisticas estadisticas = new Estadisticas();
 		estadisticas.setEvaluados(1);
 		estadisticas.setMutantes(1);
-		
 		assertEquals(1, estadisticas.getEvaluados());
 		assertEquals(1, estadisticas.getMutantes());
 	}

@@ -7,7 +7,7 @@ data:
 
       ##
       # Configuración ambiental para desarrollo (develop)
-      ##
+      ##u nombre de usuario de administrador de servicios predeterminado es "sqlserver".
       
       # Base de datos
       spring.datasource.url=jdbc:sqlserver://localhost:1433;database=api_mutantes

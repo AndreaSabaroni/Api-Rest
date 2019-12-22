@@ -1,8 +1,6 @@
 package mutante.servicio;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -17,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import mutante.modelo.ADN;
-import mutante.modelo.Estadisticas;
 import mutante.repositorios.RepositorioDeADN;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -157,40 +154,16 @@ public class ServicioMutanteTest {
 		}
 
 	}
-	
-	@Test
-	public void obtenerEstadisticasRetornaLasEstadísticasCalculadasCorrectamente() {
-
-		List<ADN> adnEvaluados = Arrays.asList(establecerADNConMutacion(true), 
-				establecerADNConMutacion(false), 
-				establecerADNConMutacion(false),
-				establecerADNConMutacion(false));
-
-		Mockito.when(repositorio.findAll()).thenReturn(adnEvaluados);
-		
-		Estadisticas estadisticas = servicio.obtenerEstadisticasDeMutantes();
-		
-		assertNotNull(estadisticas);
-		assertEquals(4, estadisticas.getEvaluados());
-		assertEquals(1, estadisticas.getMutantes());
-		assertEquals(0.25, estadisticas.getPorcentajeDeMutantes(), 0);
-	}
-
-	private ADN establecerADNConMutacion(boolean esMutante) {
-		ADN adnMutante= new ADN();
-		adnMutante.setMutante(esMutante);
-		adnMutante.setCadenaADN("AFGT");
-		return adnMutante;
-	}
 
 	private void dadoQueElADNNoExisteEnLaBase() {
 		Mockito.when(repositorio.findByCadenaADN(Mockito.anyString())).thenReturn(null);
 	}
+
 	private void dadoQueElADNExisteEnLaBaseRetornaElAdnPersistidoIndicandoMutante(boolean mutante) {
 		ADN adnConsultado = new ADN();
 		adnConsultado.setMutante(mutante);
 		Mockito.when(repositorio.findByCadenaADN(Mockito.anyString())).thenReturn(adnConsultado);
-		
+
 	}
 
 }

@@ -5,6 +5,12 @@ public class Estadisticas {
 	private int mutantes;
 	private int evaluados;
 	
+	public Estadisticas() {}
+	public Estadisticas(int mutantes, int evaluados) {
+		this.mutantes = mutantes;
+		this.evaluados = evaluados;
+	}
+	
 	public int getMutantes() {
 		return mutantes;
 	}
