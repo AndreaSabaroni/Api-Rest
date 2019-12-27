@@ -56,7 +56,10 @@ dependencies {
 	compile('org.apache.httpcomponents:httpclient:4.5.8')
    	
    	// Soporte JPA
-   	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+   	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa
+//compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.1.RELEASE'
+   	
+   	compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('com.microsoft.sqlserver:mssql-jdbc:7.2.1.jre11')
     compile('io.springfox:springfox-swagger-ui:2.9.2')
     compile('io.springfox:springfox-swagger2:2.9.2')
@@ -74,11 +77,11 @@ dependencies {
 }
 
 //flyway
-def flywayDbName = System.properties['flywayDbName'] ?: 'api-mutantes'
-def flywayServer = System.properties['flywayServer'] ?: '35.223.231.82'
+def flywayDbName = System.properties['flywayDbName'] ?: 'api_mutantes'
+def flywayServer = System.properties['flywayServer'] ?: 'localhost'
 def flywayServerPort = System.properties['flywayServerPort'] ?: '1433'
 def flywayDbPassword = System.properties['flywayDbPassword'] ?: 'Pa$$w0rd1'
-def flywayDbUser = System.properties['flywayDbUser'] ?: 'sqlserver'
+def flywayDbUser = System.properties['flywayDbUser'] ?: 'sa'
 
 
 flyway {

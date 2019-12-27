@@ -19,7 +19,6 @@ import mutante.repositorios.RepositorioDeADN;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServicioMutanteTest {
-
 	@InjectMocks
 	ServicioMutante servicio;
 
@@ -37,7 +36,6 @@ public class ServicioMutanteTest {
 		assertTrue(mutante);
 		Mockito.verify(repositorio).save(Mockito.any(ADN.class));
 	}
-
 	@Test
 	public void consultarPorUnAdnExistenteEnLABaseNoVuelveAPersistirlo() throws Exception {
 
