@@ -7,11 +7,9 @@ data:
 
       ##
       # Configuración ambiental para desarrollo (develop)
-      ##u nombre de usuario de administrador de servicios predeterminado es "sqlserver".
+      #
       
       # Base de datos
-      #spring.datasource.url=jdbc:sqlserver://localhost:1433;database=api_mutantes
-      #spring.datasource.username=sa
       spring.datasource.url=jdbc:sqlserver://35.223.231.82:1433;database=api-mutantes
       spring.datasource.username=sqlserver
       spring.datasource.password=Pa$$w0rd1
@@ -45,7 +43,7 @@ spec:
     spec:
       containers:
       - name: mutantes
-        image: asabaroni/mutantes:1.0
+        image: asabaroni/mutantes:1.1
         resources:
           requests:
             cpu: 100m
