@@ -31,23 +31,23 @@ data:
 
 kind: Deployment
 metadata:
-  name: api-mutantes
+  name: redis-slave
 spec:
   selector:
     matchLabels:
-      app: mutantes
+      app: redis
       role: slave
       tier: backend
   replicas: 2
   template:
     metadata:
       labels:
-        app: mutantes
+        app: redis
         role: slave
         tier: backend
     spec:
       containers:
-      - name: mutantes
+      - name: slave
         image: asabaroni/mutantes:1.0
         resources:
           requests:
