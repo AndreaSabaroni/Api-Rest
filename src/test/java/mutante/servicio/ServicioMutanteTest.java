@@ -15,9 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import mutante.modelo.ADN;
-import mutante.servicio.ServicioMutante;
 import mutante.repositorios.RepositorioDeADN;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServicioMutanteTest {
@@ -134,6 +132,34 @@ public class ServicioMutanteTest {
 			dadoQueElADNNoExisteEnLaBase();
 
 			List<String> dnaMutant = Arrays.asList("AATCc", "CGTAC", "ACCGc", "AAGGC", "CCtga");
+
+			assertTrue(servicio.isMutant(dnaMutant));
+		} catch (Exception ex) {
+			fail("No debe fallar");
+		}
+	}
+	
+	@Test
+	public void siLASegundaDiagonalTieneCadenaDeLetrasConsecutivas_EntoncesEsMutanteDiagonal() {
+
+		try {
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("cATCc", "CAGTC", "CCAGc", "AGGAC", "CCtga");
+
+			assertTrue(servicio.isMutant(dnaMutant));
+		} catch (Exception ex) {
+			fail("No debe fallar");
+		}
+	}
+
+	@Test
+	public void siLaSegundaCadenaYLASegundaDiagonalTieneCadenaDeLetrasConsecutivas_EntoncesEsMutanteDiagonal() {
+
+		try {
+			dadoQueElADNNoExisteEnLaBase();
+
+			List<String> dnaMutant = Arrays.asList("ccTCc", "CAGTC", "CCAGc", "AGGAC", "CCtga");
 
 			assertTrue(servicio.isMutant(dnaMutant));
 		} catch (Exception ex) {
